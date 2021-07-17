@@ -1,15 +1,16 @@
 const express = require('express');
-const { moviesMock } = require('../utils/mocks/movies');
+const MovieService = require('../services/movies');
 
 function moviesApi(app) {
   const router = express.Router();
   app.use('/api/movies', router);
 
+  const movieService = new MovieService();
   //Get all movies
   router.get('/', async (req, res, next) => {
+    const { tags } = req.query;
     try {
-      const movies = await Promise.resolve(moviesMock);
-
+      const movies = await movieService.getMovies({ tags });
       res.status(200).json(movies);
     } catch (error) {
       next(error);
@@ -18,9 +19,9 @@ function moviesApi(app) {
 
   //Get a movie by Id
   router.get('/:movieId', async (req, res, next) => {
+    const { movieId } = req.params;
     try {
-      const movie = await Promise.resolve(moviesMock[0]);
-
+      const movie = await movieService.getMovie({ movieId });
       res.status(200).json(movie);
     } catch (error) {
       next(error);
@@ -29,8 +30,9 @@ function moviesApi(app) {
 
   //Create a movie
   router.post('/', async (req, res, next) => {
+    const { body: movie } = req;
     try {
-      const createdMovie = await Promise.resolve(moviesMock[0].id);
+      const createdMovie = await movieService.createMovie({ movie });
 
       res.status(201).json(createdMovie);
     } catch (error) {
@@ -40,8 +42,10 @@ function moviesApi(app) {
 
   //Update movie
   router.put('/:movieId', async (req, res, next) => {
+    const { body: movie } = req;
+    const { movieId } = req.params;
     try {
-      const updatedMovie = await Promise.resolve(moviesMock[0]);
+      const updatedMovie = await movieService.updateMovie({ movieId, movie });
 
       res.status(200).json(updatedMovie);
     } catch (error) {
@@ -51,8 +55,9 @@ function moviesApi(app) {
 
   //Delete a movie
   router.delete('/:movieId', async (req, res, next) => {
+    const { movieId } = req.params;
     try {
-      const deletedMovie = await Promise.resolve(moviesMock[0].id);
+      const deletedMovie = await movieService.deleteMovie({ movieId });
 
       res.status(200).json(deletedMovie);
     } catch (error) {
