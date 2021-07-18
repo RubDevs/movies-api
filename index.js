@@ -3,6 +3,8 @@ const config = require('./config');
 const moviesApi = require('./routes/movies');
 const app = express();
 
+//body parser
+app.use(express.json());
 //routes
 moviesApi(app);
 
