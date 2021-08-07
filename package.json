@@ -7,7 +7,7 @@
     "dev": "DEBUG=express:*,app:* nodemon index.js",
     "debug": "DEBUG=express:*,app:* npm run start",
     "inspect": "DEBUG=express:*,app:* nodemon --inspect index",
-    "start": "NODEENV=production node index.js",
+    "start": "NODE_ENV=production node index.js",
     "test": "mocha --exit",
     "prepare": "husky install",
     "cover": "nyc npm run test",
